@@ -138,11 +138,7 @@ public class HoaDonDao {
         return list;
     }
 
-//    public List<HoaDonChiTiet_Model> danhSachHoaDonLichSuGiaoDich(){
-//        String sql = """
-//                     SELECT kh.TEN
-//                     """
-//    }
+
     public List<HoaDonChiTiet_Model> layChiTietHoaDonTheoID(int idHoaDon) {
         List<HoaDonChiTiet_Model> dsGioHang = new ArrayList<>();
         String sql = """
@@ -162,8 +158,12 @@ public class HoaDonDao {
                     JOIN Mau_Sac ms ON spct.ID_MAU_SAC = ms.ID
                     JOIN Chat_Lieu cl ON spct.ID_CHAT_LIEU = cl.ID
                     JOIN Kich_Thuoc kt ON spct.ID_KICH_THUOC = kt.ID
+<<<<<<< HEAD
                     JOIN Hoa_Don h ON hdct.ID_HD = h.ID
                     WHERE hdct.ID_HD = ? ;
+=======
+                    WHERE hdct.ID_HD = ?;
+>>>>>>> 1321c227411705f5e3dd115c72a220c19972d454
                     """;
         try {
             ps = conn.prepareStatement(sql);
@@ -347,4 +347,5 @@ public class HoaDonDao {
         }
         return hd;
     }
+
 }

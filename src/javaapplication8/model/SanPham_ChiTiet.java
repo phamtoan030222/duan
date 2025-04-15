@@ -19,20 +19,51 @@ public class SanPham_ChiTiet {
     private String donGia;
     private int soLuong;
     private boolean daXoa;
+    private String maSPCT;
+    private String qrCode;
 
     public SanPham_ChiTiet() {
     }
 
-
-    public SanPham_ChiTiet(int id,String maSp, String tenSp, String mauSac, String chatLieu, String kichThuoc, String donGia, int soLuong) {
+    public SanPham_ChiTiet(int id, String maSp, String tenSp, String kichThuoc, String mauSac, String chatLieu, String donGia, int soLuong, boolean daXoa, String maSPCT, String qrCode) {
         this.id = id;
         this.maSp = maSp;
         this.tenSp = tenSp;
+        this.kichThuoc = kichThuoc;
         this.mauSac = mauSac;
         this.chatLieu = chatLieu;
-        this.kichThuoc = kichThuoc;
         this.donGia = donGia;
         this.soLuong = soLuong;
+        this.daXoa = daXoa;
+        this.maSPCT = maSPCT;
+        this.qrCode = qrCode;
+    }
+
+    public SanPham_ChiTiet(int id, String maSp, String tenSp, String kichThuoc, String mauSac, String chatLieu, String donGia, int soLuong) {
+        this.id = id;
+        this.maSp = maSp;
+        this.tenSp = tenSp;
+        this.kichThuoc = kichThuoc;
+        this.mauSac = mauSac;
+        this.chatLieu = chatLieu;
+        this.donGia = donGia;
+        this.soLuong = soLuong;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    public String getMaSPCT() {
+        return maSPCT;
+    }
+
+    public void setMaSPCT(String maSPCT) {
+        this.maSPCT = maSPCT;
     }
 
     public String getMaSp() {
@@ -108,3 +139,4 @@ public class SanPham_ChiTiet {
     }
 
 }
+

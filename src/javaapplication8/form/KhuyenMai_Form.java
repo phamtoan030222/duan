@@ -103,6 +103,7 @@ fillTablePhieuGiamGiaTheoTrangThai(trangThai);
 
     }
 
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -139,6 +140,7 @@ fillTablePhieuGiamGiaTheoTrangThai(trangThai);
         cbo_trangthai = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPhieuGiamGia = new javax.swing.JTable();
+
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -263,6 +265,7 @@ fillTablePhieuGiamGiaTheoTrangThai(trangThai);
         });
 
         tblPhieuGiamGia.setModel(new javax.swing.table.DefaultTableModel(
+
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null},
@@ -284,6 +287,7 @@ fillTablePhieuGiamGiaTheoTrangThai(trangThai);
             tblPhieuGiamGia.getColumnModel().getColumn(7).setMinWidth(70);
             tblPhieuGiamGia.getColumnModel().getColumn(7).setPreferredWidth(70);
             tblPhieuGiamGia.getColumnModel().getColumn(7).setMaxWidth(70);
+
         }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

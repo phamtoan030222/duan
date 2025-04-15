@@ -19,6 +19,7 @@ public class PhieuGiamGiaModel {
     private int trangThai;
     private int idNV;
 
+
     public PhieuGiamGiaModel() {
     }
 
@@ -26,6 +27,7 @@ public class PhieuGiamGiaModel {
         this.id = id;
         this.maPGG = maPGG;
         this.tenPGG = tenPGG;
+
         this.ngayDB = ngayDB;
         this.ngayKT = ngayKT;
         this.soLuong = soLuong;
@@ -58,6 +60,7 @@ public class PhieuGiamGiaModel {
     }
 
     
+
 
     public int getId() {
         return id;
@@ -109,6 +112,7 @@ public class PhieuGiamGiaModel {
 
     
 
+
     public int getPhantramgiam() {
         return phantramgiam;
     }
@@ -122,6 +126,7 @@ public class PhieuGiamGiaModel {
     }
 
     public void setGiamToiDa(BigDecimal giamToiDa) {
+
         this.giamToiDa = giamToiDa;
     }
 
@@ -149,9 +154,5 @@ public class PhieuGiamGiaModel {
         this.trangThai = trangThai;
     }
 
-    
-    
-    
-      
     
 }

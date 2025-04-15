@@ -9,6 +9,7 @@ package javaapplication8.model;
  * @author dungc
  */
 public class SanPham_ThuocTinh {
+
     private int id;
     private String ma;
     private String ten;
@@ -29,8 +30,7 @@ public class SanPham_ThuocTinh {
         this.ma = ma;
         this.ten = ten;
     }
-    
-    
+
 
     public int getId() {
         return id;
@@ -63,5 +63,6 @@ public class SanPham_ThuocTinh {
     public void setDaXoa(boolean daXoa) {
         this.daXoa = daXoa;
     }
-    
+
 }
+

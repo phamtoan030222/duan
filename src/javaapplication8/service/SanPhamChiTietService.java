@@ -28,4 +28,12 @@ public interface SanPhamChiTietService {
     
     SanPham_ChiTiet timSanPhamChiTietTheoMa(String maSPCT);
     
-}
+    boolean updateSanPhamChiTiet(String ma, int idsp,  int idms, int idcl,int idkt, String donGia, int soLuong);
+    
+    boolean taoVaLuuQR(String maSPCT);
+    
+    String getQRPathByMaSPCT(String maSPCT);
+    
+    SanPham_ChiTiet getByMaSPCT(String maSPCT);
+    
+    }

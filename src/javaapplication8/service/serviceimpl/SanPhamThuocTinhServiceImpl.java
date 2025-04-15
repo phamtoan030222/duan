@@ -4,6 +4,8 @@
  */
 package javaapplication8.service.serviceimpl;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javaapplication8.dao.SanPhamThuocTinhDao;
 import javaapplication8.model.SanPham_ThuocTinh;
@@ -62,4 +64,4 @@ public class SanPhamThuocTinhServiceImpl implements SanPhamThuocTinhService {
         return dao.xoaThuocTinhSanPham(tableName, id);
     }
 
-}
+    }

@@ -54,4 +54,23 @@ public class SanPhamChiTietServiceImpl implements SanPhamChiTietService {
         return dao.timSanPhamChiTietTheoMa(maSPCT);
     }
 
-}
+    public boolean updateSanPhamChiTiet(String ma, int idsp, int idms, int idcl, int idkt, String donGia, int soLuong) {
+        return dao.updateSanPhamChiTiet(ma, idsp, idms, idcl, idkt, donGia, soLuong);
+    }
+
+    @Override
+    public boolean taoVaLuuQR(String maSPCT) {
+        return dao.taoVaLuuQR(maSPCT);
+    }
+
+    @Override
+    public String getQRPathByMaSPCT(String maSPCT) {
+        return dao.getQRPathByMaSPCT(maSPCT);
+    }
+
+    @Override
+    public SanPham_ChiTiet getByMaSPCT(String maSPCT) {
+        return dao.getByMaSPCT(maSPCT);
+    }
+
+    }

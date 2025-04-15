@@ -20,10 +20,11 @@ public interface HoaDonService {
     boolean themSanPhamVaoHoaDon(int idHD, int idSPCT, int soLuong, BigDecimal donGia, String maHDCT);
     
     boolean xoaSanPhamKhoiHoaDon(int idHD,int idSPCT);
-    
+
     boolean updateHoaDon(String maHD, String ngayThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra );
 
     boolean huyHoaDon(String maHD);
     
     HoaDon_Model layIdHoaDonTheoMa(String ma);
+
 }

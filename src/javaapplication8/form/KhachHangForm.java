@@ -57,6 +57,7 @@ public class KhachHangForm extends javax.swing.JPanel {
         }
     }
     
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -721,5 +722,6 @@ public class KhachHangForm extends javax.swing.JPanel {
     private javax.swing.JTextField txt_sdt;
     private javax.swing.JTextField txt_timkiem;
     private javax.swing.JTextField txt_timkiem4;
+
     // End of variables declaration//GEN-END:variables
 }

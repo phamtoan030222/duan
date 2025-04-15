@@ -12,10 +12,12 @@ import javaapplication8.model.Model_SanPham;
  * @author dungc
  */
 public interface SanPhamService {
-    List<Model_SanPham> layDanhSachSanPhamDangBan();
-    
-    List<Model_SanPham> layDanhSachSanPhamNgungBan();
-    
+
+
+    int countAll(int status);  // Đếm tổng số sản phẩm theo trạng thái (0: đang bán, 1: ngừng bán)
+
+    List<Model_SanPham> getPage(int offset, int limit, int status);  // Lấy danh sách phân trang theo trạng thái
+
     boolean addSanPham(String masp, String tensp, String mota);
     
     boolean kiemTraTenSanPhamDaTonTai(String ten);
@@ -28,3 +30,4 @@ public interface SanPhamService {
     
     boolean khoiPhucSanPhamDaXoa(int id);
 }
+

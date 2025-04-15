@@ -371,6 +371,7 @@ public class LichSu_Form extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -411,5 +412,6 @@ public class LichSu_Form extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lbl_trang;
     private javax.swing.JTextField txt_timkiemhoadon;
+
     // End of variables declaration//GEN-END:variables
 }

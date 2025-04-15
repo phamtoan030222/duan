@@ -9,6 +9,7 @@ package javaapplication8.model;
  * @author dungc
  */
 public class Model_SanPham {
+
     private int id;
     private String maSp;
     private String ten;
@@ -76,5 +77,4 @@ public class Model_SanPham {
         this.daXoa = daXoa;
     }
 
-    
-}
+    }

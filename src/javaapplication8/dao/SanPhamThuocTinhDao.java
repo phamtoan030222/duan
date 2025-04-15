@@ -7,7 +7,10 @@ package javaapplication8.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javaapplication8.model.SanPham_ThuocTinh;
 import javaapplication8.until.DBConnect;
 
@@ -95,22 +98,21 @@ public class SanPhamThuocTinhDao {
     }
 
     public boolean xoaThuocTinhSanPham(String tableName, int id) {
-    String sql = "DELETE FROM SAN_PHAM_CHI_TIET WHERE ID_" + tableName + " = ?; " +
-                 "DELETE FROM " + tableName + " WHERE ID = ?;";
 
-    try {
-        ps = conn.prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.setInt(2, id);
+        String sql = "DELETE FROM SAN_PHAM_CHI_TIET WHERE ID_" + tableName + " = ?; "
+                + "DELETE FROM " + tableName + " WHERE ID = ?;";
 
-        int rowsAffected = ps.executeUpdate(); // dùng executeUpdate
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.setInt(2, id);
 
-        return rowsAffected > 0; // nếu có dòng bị ảnh hưởng, xóa thành công
-    } catch (Exception e) {
-        e.printStackTrace();
+            int rowsAffected = ps.executeUpdate(); // dùng executeUpdate
+
+            return rowsAffected > 0; // nếu có dòng bị ảnh hưởng, xóa thành công
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
-
-
-}
+    }

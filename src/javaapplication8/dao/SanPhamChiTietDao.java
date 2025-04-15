@@ -1,6 +1,13 @@
 package javaapplication8.dao;
 
 import java.math.BigDecimal;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -109,19 +116,22 @@ public class SanPhamChiTietDao {
         return false; // Tên chưa tồn tại
     }
 
-    public boolean updateSanPham(String ma, String ten, int idsp, int idkt, int idms, int idcl, String donGia, int soLuong) {
-        sql = "UPDATE San_Pham_Chi_Tiet set  TEN_SP = ? , ID_SAN_PHAM = ? , ID_KICH_THUOC = ? , ID_MAU_SAC = ? , ID_CHAT_LIEU = ? , DON_GIA = ? , SO_LUONG = ?  where MA_SPCT = ? ";
+
+    public boolean updateSanPhamChiTiet(String ma, int idsp, int idms, int idcl, int idkt, String donGia, int soLuong) {
+        sql = "UPDATE San_Pham_Chi_Tiet set  ID_SAN_PHAM = ? , ID_MAU_SAC = ? , ID_CHAT_LIEU = ? , ID_KICH_THUOC = ? , DON_GIA = ? , SO_LUONG = ?  where MA_SPCT = ? ";
+
         try {
+
             ps = conn.prepareStatement(sql);
 
-            ps.setString(1, ten);
-            ps.setInt(2, idsp);
-            ps.setInt(3, idkt);
-            ps.setInt(4, idms);
-            ps.setInt(5, idcl);
-            ps.setString(6, donGia);
-            ps.setInt(7, soLuong);
-            ps.setString(8, ma);
+            ps.setInt(1, idsp);
+            ps.setInt(2, idms);
+            ps.setInt(3, idcl);
+            ps.setInt(4, idkt);
+            ps.setString(5, donGia);
+            ps.setInt(6, soLuong);
+            ps.setString(7, ma);
+
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             return false;
@@ -186,7 +196,6 @@ public class SanPhamChiTietDao {
                 donGia = rs.getString(7);
                 soLuong = rs.getInt(8);
 
-//                list.add(new SanPham_ChiTiet(maSp, tenSp, loaiSp, kichThuoc, mauSac, chatLieu, donGia, soLuong));
             }
             return list;
         } catch (Exception e) {
@@ -206,31 +215,36 @@ public class SanPhamChiTietDao {
             conn.setAutoCommit(false); // Tắt auto commit để kiểm soát transaction
 
             // Thực hiện các câu lệnh update
-            try ( PreparedStatement ps = conn.prepareStatement(sql5)) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql5)) {
                 ps.setString(1, ma);
                 System.out.println(ma);
                 ps.executeUpdate();
             }
 
-            try ( PreparedStatement ps = conn.prepareStatement(sql1)) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql1)) {
                 ps.setInt(1, idsp);
                 System.out.println(idsp);
                 ps.executeUpdate();
             }
 
-            try ( PreparedStatement ps = conn.prepareStatement(sql2)) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql2)) {
                 ps.setInt(1, idms);
                 System.out.println(idms);
                 ps.executeUpdate();
             }
 
-            try ( PreparedStatement ps = conn.prepareStatement(sql3)) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql3)) {
                 ps.setInt(1, idkt);
                 System.out.println(idkt);
                 ps.executeUpdate();
             }
 
-            try ( PreparedStatement ps = conn.prepareStatement(sql4)) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql4)) {
                 ps.setInt(1, idcl);
                 System.out.println(idcl);
                 ps.executeUpdate();
@@ -289,8 +303,8 @@ public class SanPhamChiTietDao {
                 donGia = rs.getString(7);
                 soLuong = rs.getInt(8);
 
-//                list.add(new SanPham_ChiTiet(maSp, tenSp, loaiSp, kichThuoc, mauSac, chatLieu, donGia, soLuong));
-            }
+
+           }
             return list;
         } catch (Exception e) {
             e.printStackTrace();
@@ -384,7 +398,101 @@ public class SanPhamChiTietDao {
         }
         return false;
     }
-    
+
+
+    public boolean taoVaLuuQR(String maSPCT) {
+        try {
+            String data = maSPCT;
+            String path = "qr/" + maSPCT + ".png"; // thư mục qr, nên tạo trước
+            int width = 200, height = 200;
+
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, width, height);
+            Path filePath = Paths.get(path);
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", filePath);
+
+            // Sau khi tạo xong, cập nhật đường dẫn vào CSDL
+            String sql = "UPDATE San_Pham_Chi_Tiet SET QR_CODE_PATH = ? WHERE MA_SPCT = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, path);
+            ps.setString(2, maSPCT);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String getQRPathByMaSPCT(String maSPCT) {
+        String qrPath = null;
+        try {
+            if (conn == null || conn.isClosed()) {
+                conn = DBConnect.getConnection(); // Mở kết nối lại nếu bị đóng
+            }
+
+            String sql = "SELECT QR_CODE_PATH FROM San_Pham_Chi_Tiet WHERE MA_SPCT = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maSPCT);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                qrPath = rs.getString("QR_CODE_PATH");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return qrPath;
+    }
+
+    public SanPham_ChiTiet getByMaSPCT(String maSPCT) {
+        Connection conn = DBConnect.getConnection();
+        if (conn == null) {
+            System.out.println("❌ Kết nối cơ sở dữ liệu thất bại");
+            return null;
+        }
+
+        String sql = """
+         SELECT sp.TEN, spt.ID_MAU_SAC, spt.ID_KICH_THUOC, spt.ID_CHAT_LIEU, spt.DON_GIA, spt.SO_LUONG, spt.QR_CODE_PATH
+            FROM San_Pham_Chi_Tiet spt
+            JOIN San_Pham sp ON spt.ID_SAN_PHAM = sp.ID
+            WHERE spt.MA_SPCT = ?;
+    """;
+
+        try {
+            System.out.println("📥 Đang truy vấn với mã: '" + maSPCT + "'");
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, maSPCT.trim());
+
+            ResultSet rs = ps.executeQuery();
+            System.out.println("🧪 Đã thực thi truy vấn.");
+
+            if (rs.next()) {
+                System.out.println("✅ Dữ liệu được tìm thấy trong CSDL");
+
+                SanPham_ChiTiet spct = new SanPham_ChiTiet();
+                spct.setMaSPCT(maSPCT.trim());
+
+                spct.setTenSp(rs.getString("TEN")); // Lấy tên sản phẩm
+                spct.setMauSac(rs.getString("ID_MAU_SAC"));
+                spct.setChatLieu(rs.getString("ID_CHAT_LIEU"));
+                spct.setKichThuoc(rs.getString("ID_KICH_THUOC"));
+                spct.setDonGia(rs.getString("DON_GIA"));
+                spct.setSoLuong(rs.getInt("SO_LUONG"));
+                spct.setQrCode(rs.getString("QR_CODE_PATH"));
+
+                System.out.println("✅ Truy vấn thành công với mã SPCT: " + maSPCT);
+                return spct;
+            } else {
+                System.out.println("❌ Không tìm thấy dữ liệu với mã: '" + maSPCT + "'");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public SanPham_ChiTiet timSanPhamChiTietTheoMa(String maSPCT){
         String sql = """
                      SELECT * FROM San_Pham_Chi_Tiet WHERE ma_SPCT = ?
@@ -403,6 +511,5 @@ public class SanPhamChiTietDao {
         }
         return spct;
     }
-    
 
 }

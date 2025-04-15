@@ -26,8 +26,6 @@ public class ThemNhanhTT extends javax.swing.JFrame {
     private Runnable onCloseCallback;
     private Consumer<String> onTenMoiCallback;
 
-
-
     public ThemNhanhTT(ThemSanPhamChiTiet parent, Runnable onCloseCallback) {
         this.parentFrame = parent;
         this.onCloseCallback = onCloseCallback;
@@ -42,10 +40,11 @@ public class ThemNhanhTT extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
     }
-    
+
+
     public void setOnTenMoiCallback(Consumer<String> callback) {
-    this.onTenMoiCallback = callback;
-}
+        this.onTenMoiCallback = callback;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -142,15 +141,14 @@ public class ThemNhanhTT extends javax.swing.JFrame {
             ma = CodeGeneratorUtil.generateChatLieu();
         } else if (tableName.equals("Kich_Thuoc")) {
             ma = CodeGeneratorUtil.generateKichThuoc();
-    }
-        
+
+        }
 
         // Kiểm tra tên không được để trống
         if (ValidationUtil.isEmpty(ten)) {
             lbl_thongbaothemnhanh.setText("Tên thuộc tính không được để trống");
             return;
         }
-        
 
         // Kiểm tra tên thuộc tính đã tồn tại chưa
         if (service_spthuoctinh.kiemTraTenThuocTinhDaTonTai(tableName, ten)) {
@@ -169,7 +167,6 @@ public class ThemNhanhTT extends javax.swing.JFrame {
                     onCloseCallback.run();  // Gọi phương thức callback
                     onTenMoiCallback.accept(ten); // Gửi tên vừa thêm về
                 }
-                
                 this.dispose();  // Đóng cửa sổ ThemNhanhTT
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm thất bại.");
@@ -232,4 +229,4 @@ public class ThemNhanhTT extends javax.swing.JFrame {
         return this.selectedTable;
     }
 
-}
+    }

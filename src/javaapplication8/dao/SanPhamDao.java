@@ -7,7 +7,9 @@ package javaapplication8.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javaapplication8.model.Model_SanPham;
 import javaapplication8.until.DBConnect;
 
@@ -15,7 +17,8 @@ import javaapplication8.until.DBConnect;
  *
  * @author dungc
  */
-public class SanPhamDao {
+
+public class SanPhamDao implements PhanTrangDao<Model_SanPham> {
 
     private ArrayList<Model_SanPham> list;
     private PreparedStatement ps = null;
@@ -23,87 +26,62 @@ public class SanPhamDao {
     private ResultSet rs = null;
     private String sql;
 
+    private int status = 0; // mặc định là đang bán
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public SanPhamDao() {
         conn = DBConnect.getConnection();
 
         list = new ArrayList<>();
     }
 
-    public ArrayList<Model_SanPham> getSanPhamDangBan() {
-        ArrayList<Model_SanPham> list = new ArrayList<>();
-        sql = """
-            SELECT 
-                      sp.ID, 
-                      MA, 
-                      TEN, 
-                      MO_TA, 
-                      SUM(ISNULL(ct.SO_LUONG, 0)) AS TongSoLuong, 
-                      sp.DA_XOA
-                  FROM San_Pham sp
-                  LEFT JOIN San_Pham_Chi_Tiet ct ON sp.ID = ct.ID_SAN_PHAM AND ct.DA_XOA = 0
-                  WHERE sp.DA_XOA = 0
-                  GROUP BY 
-                      sp.ID, 
-                      MA, 
-                      TEN, 
-                      MO_TA, 
-                      sp.DA_XOA
-              """;
 
-        try {
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("ID");
-                String maSP = rs.getString("MA");
-                String ten = rs.getString("TEN");
-                String moTa = rs.getString("MO_TA");
-                int SoLuong = rs.getInt("TongSoLuong");
-                boolean daXoa = rs.getBoolean("DA_XOA");
-                list.add(new Model_SanPham(id, maSP, ten, moTa, SoLuong, daXoa));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list;
+    @Override
+    public int countAll() throws SQLException {
+        sql = "SELECT COUNT(DISTINCT sp.ID) FROM San_Pham sp WHERE sp.DA_XOA = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, status);
+        rs = ps.executeQuery();
+        rs.next();
+        return rs.getInt(1);
     }
 
-    public ArrayList<Model_SanPham> getSanPhamNgungBan() {
-        ArrayList<Model_SanPham> list = new ArrayList<>();
+    @Override
+    public List<Model_SanPham> getPage(int offset, int limit) throws SQLException {
+        List<Model_SanPham> list = new ArrayList<>();
         sql = """
-           SELECT 
-                      San_Pham.ID, 
-                      MA, 
-                      TEN, 
-                      MO_TA, 
-                      SUM(ISNULL(San_Pham_Chi_Tiet.SO_LUONG, 0)) AS TongSoLuong, 
-                      San_Pham.DA_XOA
-                  FROM San_Pham
-                  LEFT JOIN San_Pham_Chi_Tiet 
-                      ON San_Pham.ID = San_Pham_Chi_Tiet.ID_SAN_PHAM
-                  WHERE San_Pham.DA_XOA = 1
-                  GROUP BY 
-                      San_Pham.ID, 
-                      MA, 
-                      TEN, 
-                      MO_TA, 
-                      San_Pham.DA_XOA
-              """;
+            SELECT * FROM (
+                SELECT 
+                    sp.ID, MA, TEN, MO_TA,
+                    SUM(ISNULL(ct.SO_LUONG, 0)) AS TongSoLuong,
+                    sp.DA_XOA,
+                    ROW_NUMBER() OVER (ORDER BY sp.ID) AS rn
+                FROM San_Pham sp
+                LEFT JOIN San_Pham_Chi_Tiet ct ON sp.ID = ct.ID_SAN_PHAM AND ct.DA_XOA = 0
+                WHERE sp.DA_XOA = ?
+                GROUP BY sp.ID, MA, TEN, MO_TA, sp.DA_XOA
+            ) AS temp
+            WHERE rn BETWEEN ? AND ?
+        """;
 
-        try {
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("ID");
-                String maSP = rs.getString("MA");
-                String ten = rs.getString("TEN");
-                String moTa = rs.getString("MO_TA");
-                int SoLuong = rs.getInt("TongSoLuong");
-                boolean daXoa = rs.getBoolean("DA_XOA");
-                list.add(new Model_SanPham(id, maSP, ten, moTa, SoLuong, daXoa));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, status);
+        ps.setInt(2, offset + 1);
+        ps.setInt(3, offset + limit);
+
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(new Model_SanPham(
+                    rs.getInt("ID"),
+                    rs.getString("MA"),
+                    rs.getString("TEN"),
+                    rs.getString("MO_TA"),
+                    rs.getInt("TongSoLuong"),
+                    rs.getBoolean("DA_XOA")
+            ));
         }
         return list;
     }
@@ -158,7 +136,6 @@ public class SanPhamDao {
         return false;
     }
 
-
     public boolean updateDaXoaSanPham(int id) {
 
         PreparedStatement ps1 = null;
@@ -208,7 +185,8 @@ public class SanPhamDao {
         ArrayList<Model_SanPham> list = new ArrayList<Model_SanPham>();
 
         String sql = """
-                        SELECT 
+
+                                         SELECT 
                                               sp.ID, 
                                               MA, 
                                               TEN, 
@@ -229,7 +207,7 @@ public class SanPhamDao {
             ps = conn.prepareStatement(sql);
             ps.setString(3, "%" + keyword + "%"); // LIKE tìm kiếm
             ps.setInt(2, daXoa);
-             ps.setInt(1, daXoa);
+            ps.setInt(1, daXoa);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

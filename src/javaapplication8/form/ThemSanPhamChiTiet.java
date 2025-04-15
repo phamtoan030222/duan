@@ -427,16 +427,18 @@ public class ThemSanPhamChiTiet extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm chi tiết thành công.");
 
 //                parentFrame.fillTable_SanPhamChiTiet(service_spChiTiet.getAllSanPhamChiTiet());
-                  parentFrame.capNhatBangSanPhamChiTiet(service_spChiTiet.getAllSanPhamChiTiet());
-                  parentFrame.macDinhCboSPCT();
 
+                parentFrame.capNhatBangSanPhamChiTiet(service_spChiTiet.getAllSanPhamChiTiet());
+                parentFrame.macDinhCboSPCT();
+                service_spChiTiet.taoVaLuuQR(ma);
 
                 // ✅ Gọi callback để form cha cập nhật bảng
                 if (onCloseCallback != null) {
                     onCloseCallback.run();
                 }
                 parentFrame.xuLyChonRadioButton();
-                parentFrame.fillTable_SP(service_sp.layDanhSachSanPhamDangBan());
+
+                parentFrame.loadDataSP(); // ← gọi lại phương thức phân trang đúng chuẩn
 
                 // ✅ Đóng form sau khi thêm nếu muốn
                 this.dispose();
@@ -459,8 +461,8 @@ public class ThemSanPhamChiTiet extends javax.swing.JFrame {
         if (onCloseCallback != null) {
             onCloseCallback.run();
         }
-        parentFrame.xuLyChonRadioButton();
-        parentFrame.fillTable_SP(service_sp.layDanhSachSanPhamDangBan());
+
+        parentFrame.loadDataSP(); // ← gọi lại phương thức phân trang đúng chuẩn
 
         // Đóng form hiện tại
         this.dispose();
@@ -556,4 +558,4 @@ public class ThemSanPhamChiTiet extends javax.swing.JFrame {
     private javax.swing.JTextField txt_soluongspct;
     // End of variables declaration//GEN-END:variables
 
-}
+    }
