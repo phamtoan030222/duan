@@ -4,6 +4,7 @@ import java.awt.Color;
 import javaapplication8.event.EventMenuSelected;
 import javaapplication8.form.DangXuatForm;
 import javaapplication8.form.DoiMatKhau_Form;
+import javaapplication8.form.Form_DoiMatKhau;
 import javaapplication8.form.Form_Home;
 import javaapplication8.form.HoaDon_Form;
 import javaapplication8.form.KhachHangForm;
@@ -27,8 +28,8 @@ public class Main extends javax.swing.JFrame {
     private KhachHangForm khachHangForm;
     private LichSu_Form lichSu_Form;
     private KhuyenMai_Form khuyenMai_Form;
-    private DoiMatKhau_Form doiMatKhau_Form;
     private DangXuatForm dangXuatForm;
+    private Form_DoiMatKhau doiMatKhauForm;
 
     public Main(Model_NhanVien nv) {
         initComponents();
@@ -38,12 +39,14 @@ public class Main extends javax.swing.JFrame {
         thongKe_Form = new ThongKe_Form();
         nhanVien_Form = new NhanVien_Form();
         
-        hoaDon_Form = new HoaDon_Form(nv);
-        hoaDon_Form.setNhanVien(nv);
+        
+        
         khachHangForm = new KhachHangForm();
         lichSu_Form = new LichSu_Form();
+        hoaDon_Form = new HoaDon_Form(nv, lichSu_Form);
+        hoaDon_Form.setNhanVien(nv);
         khuyenMai_Form = new KhuyenMai_Form();
-        doiMatKhau_Form = new DoiMatKhau_Form();
+        doiMatKhauForm = new Form_DoiMatKhau();
         dangXuatForm = new DangXuatForm();
         header1.setNhanVien(nv);
 
@@ -67,7 +70,7 @@ public class Main extends javax.swing.JFrame {
                 } else if (index == 6) {
                     setForm(khuyenMai_Form);
                 } else if (index == 7) {
-                    setForm(doiMatKhau_Form);
+                    setForm(doiMatKhauForm);
                 } else if (index == 8) {
                     setForm(dangXuatForm);
                 }
@@ -148,7 +151,7 @@ public class Main extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Model_NhanVien nv = null;
+                Model_NhanVien nv = new Model_NhanVien();
                 new Main(nv).setVisible(true);
             }
         });

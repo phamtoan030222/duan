@@ -107,7 +107,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="btn_taohoadon" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn_taohoad" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="jButton3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -121,7 +121,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btn_taohoadon" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btn_taohoad" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -145,7 +145,7 @@
             <Property name="text" type="java.lang.String" value="Qu&#xe9;t m&#xe3; SP"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_taohoadon">
+        <Component class="javax.swing.JButton" name="btn_taohoad">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="99" type="rgb"/>
@@ -159,7 +159,7 @@
             <Property name="text" type="java.lang.String" value="T&#x1ea1;o h&#xf3;a &#x111;&#x1a1;n"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_taohoadonActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_taohoadActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton3">
@@ -402,8 +402,7 @@
                       <Component id="cbo_gia" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jScrollPane3" pref="180" max="32767" attributes="0"/>
-
+                  <Component id="jScrollPane3" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -631,13 +630,11 @@
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="txt_makhthongtinkhachhang" min="-2" pref="178" max="-2" attributes="0"/>
-
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="txt_thongtinkhachhangten" alignment="0" min="-2" pref="178" max="-2" attributes="0"/>
-
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -651,14 +648,12 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="txt_makhthongtinkhachhang" alignment="3" min="-2" max="-2" attributes="0"/>
-
                           <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="25" max="32767" attributes="0"/>
                       <Component id="txt_thongtinkhachhangten" min="-2" max="-2" attributes="0"/>
-
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -674,7 +669,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txt_makhthongtinkhachhang">
-
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="text" type="java.lang.String" value="###"/>
@@ -700,7 +694,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txt_thongtinkhachhangten">
-
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
@@ -731,7 +724,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
               </Events>
-
             </Component>
           </SubComponents>
         </Container>
@@ -776,7 +768,6 @@
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace pref="21" max="32767" attributes="0"/>
-
                                       <Component id="txt_ngaythanhtoan" min="-2" pref="178" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -818,7 +809,6 @@
                               <Component id="txt_tienkhachchuyenkhoan" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -831,7 +821,6 @@
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-
                               <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="jButton6" min="-2" max="-2" attributes="0"/>
@@ -839,10 +828,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lbl_tongtienthuc1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                              <Component id="lbl_tongtienthuc" min="-2" pref="121" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="lbl_tongtienthuc" max="32767" attributes="0"/>
                           </Group>
-
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -898,9 +885,8 @@
                           <Component id="txt_tienkhachdua" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lbl_tienkhachdua" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="12" max="32767" attributes="0"/>
-
+                      <Component id="lbl_tienkhachdua" pref="16" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel21" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txt_tienkhachchuyenkhoan" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -916,13 +902,11 @@
                           <Component id="lbl_tongtienthuc" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-
                   </Group>
               </Group>
             </DimensionLayout>
@@ -946,7 +930,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
               </Events>
-
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">
               <Properties>
@@ -1095,7 +1078,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="33" green="0" red="ff" type="rgb"/>
                 </Property>
-
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.CompoundBorderInfo">
                     <CompoundBorder>
@@ -1144,7 +1126,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbo_phieugiamgiaActionPerformed"/>
               </Events>
-
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -1163,7 +1144,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbo_htttActionPerformed"/>
               </Events>
-
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -1172,7 +1152,6 @@
               <Events>
                 <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="txt_tienkhachduaCaretUpdate"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_tienkhachduaActionPerformed"/>
-
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_tienkhachduaKeyReleased"/>
               </Events>
             </Component>
@@ -1218,7 +1197,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="33" green="0" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="u"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbl_tongtienthuc1">
@@ -1231,7 +1209,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="T&#x1ed5;ng: "/>
               </Properties>
-
             </Component>
           </SubComponents>
         </Container>

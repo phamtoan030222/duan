@@ -11,17 +11,20 @@ public class HoaDon_Model {
     private String tenKhachHang;
     private String maNV;
     private String ngayTao;
+    private String ngayTT;
     private String sdtKH;
     private String tongTien;
     private String tongTienKhiGiam;
     private String diaChiKhachHang;
     private boolean trangThai;
     private int tongSP;
+    private String qrHoaDon;
+    private int hanhDong;
 
     public HoaDon_Model() {
     }
 
-    public HoaDon_Model(int id, String maHD, int idKH, int idNV, int idPGG, int idTT, String tenKhachHang, String maNV, String ngayTao, String sdtKH, String tongTien, String tongTienKhiGiam, String diaChiKhachHang, boolean trangThai, int tongSP) {
+    public HoaDon_Model(int id, String maHD, int idKH, int idNV, int idPGG, int idTT, String tenKhachHang, String maNV, String ngayTao, String ngayTT, String sdtKH, String tongTien, String tongTienKhiGiam, String diaChiKhachHang, boolean trangThai, int tongSP, String qrHoaDon, int hanhDong) {
         this.id = id;
         this.maHD = maHD;
         this.idKH = idKH;
@@ -31,13 +34,44 @@ public class HoaDon_Model {
         this.tenKhachHang = tenKhachHang;
         this.maNV = maNV;
         this.ngayTao = ngayTao;
+        this.ngayTT = ngayTT;
         this.sdtKH = sdtKH;
         this.tongTien = tongTien;
         this.tongTienKhiGiam = tongTienKhiGiam;
         this.diaChiKhachHang = diaChiKhachHang;
         this.trangThai = trangThai;
         this.tongSP = tongSP;
+        this.qrHoaDon = qrHoaDon;
+        this.hanhDong = hanhDong;
     }
+
+    public String getQrHoaDon() {
+        return qrHoaDon;
+    }
+
+    public void setQrHoaDon(String qrHoaDon) {
+        this.qrHoaDon = qrHoaDon;
+    }
+
+    public int getHanhDong() {
+        return hanhDong;
+    }
+
+    public void setHanhDong(int hanhDong) {
+        this.hanhDong = hanhDong;
+    }
+
+    
+
+    public String getNgayTT() {
+        return ngayTT;
+    }
+
+    public void setNgayTT(String ngayTT) {
+        this.ngayTT = ngayTT;
+    }
+
+    
 
     public int getTongSP() {
         return tongSP;

@@ -56,6 +56,30 @@ public class EmailUtil {
         }
     }
     
+    public static void sendEmail(String to, String subject, String body) throws Exception {
+        
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+            new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(EMAIL_SENDER, PASSWORD);
+                }
+            });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(EMAIL_SENDER));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+        message.setSubject(subject);
+        message.setText(body);
+
+        Transport.send(message);
+    }
+    
     private static String generateOTP() {
         Random rand = new Random();
         int otp = 100000 + rand.nextInt(900000);

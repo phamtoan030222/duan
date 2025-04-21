@@ -1,9 +1,11 @@
 package javaapplication8.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import javaapplication8.model.HoaDonChiTiet_Model;
 import javaapplication8.model.HoaDon_Model;
+import javaapplication8.model.LichSuHoaDon;
 
 public interface HoaDonService {
     
@@ -21,10 +23,20 @@ public interface HoaDonService {
     
     boolean xoaSanPhamKhoiHoaDon(int idHD,int idSPCT);
 
-    boolean updateHoaDon(String maHD, String ngayThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra );
+    boolean updateHoaDon(String maHD, LocalDateTime ngayThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra );
 
     boolean huyHoaDon(String maHD);
     
     HoaDon_Model layIdHoaDonTheoMa(String ma);
+    
+    List<HoaDon_Model> danhsachHoaDonDaThanhToan();
+    
+    void hanhDong(int idHD,int hanhDong, LocalDateTime thoiGianInHD, int idNV) ;
+    
+    List<LichSuHoaDon> lichSuHoaDonTheoID(int idHD);
+    
+    boolean taoVaLuuQR(String maHD);
+    
+    HoaDon_Model layHoaDonTheoMa(String maHD);
 
 }

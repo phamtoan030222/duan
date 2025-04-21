@@ -14,4 +14,7 @@ public interface PhieuGiamGiaService {
     
     boolean capNhatSoLuongPhieuGiamGia(int id);
     
+    boolean themMoiPGG(PhieuGiamGiaModel pgg);
+    
+    boolean xoaPhieuGiamGia(String maPGG);
 }

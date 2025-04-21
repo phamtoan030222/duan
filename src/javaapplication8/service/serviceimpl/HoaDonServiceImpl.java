@@ -1,10 +1,12 @@
 package javaapplication8.service.serviceimpl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import javaapplication8.dao.HoaDonDao;
 import javaapplication8.model.HoaDonChiTiet_Model;
 import javaapplication8.model.HoaDon_Model;
+import javaapplication8.model.LichSuHoaDon;
 import javaapplication8.service.HoaDonService;
 
 public class HoaDonServiceImpl implements HoaDonService {
@@ -47,13 +49,13 @@ public class HoaDonServiceImpl implements HoaDonService {
     }
 
     @Override
-    public boolean updateHoaDon(String maHD, String ngayThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra) {
+    public boolean updateHoaDon(String maHD, LocalDateTime ngayThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra) {
         return hoaDonDao.updateHoaDon(maHD, ngayThanhToan, idKH, tongTien, idPhieuGG, hinhTHucThanhToan, tongTienThucTra);
     }
 
     @Override
     public boolean huyHoaDon(String maHD) {
-         return hoaDonDao.huyHoaDon(maHD);
+        return hoaDonDao.huyHoaDon(maHD);
     }
 
     @Override
@@ -61,6 +63,29 @@ public class HoaDonServiceImpl implements HoaDonService {
         return hoaDonDao.layIdHoaDonTheoMa(ma);
     }
 
-    
+    @Override
+    public List<HoaDon_Model> danhsachHoaDonDaThanhToan() {
+        return hoaDonDao.danhsachHoaDonDaThanhToan();
+    }
+
+    @Override
+    public void hanhDong(int idHD, int hanhDong, LocalDateTime thoiGianInHD, int idNV) {
+        hoaDonDao.hanhDong(idHD, hanhDong, thoiGianInHD, idNV);
+    }
+
+    @Override
+    public List<LichSuHoaDon> lichSuHoaDonTheoID(int idHD) {
+        return hoaDonDao.lichSuHoaDonTheoID(idHD);
+    }
+
+    @Override
+    public boolean taoVaLuuQR(String maHD) {
+        return hoaDonDao.taoVaLuuQR(maHD);
+    }
+
+    @Override
+    public HoaDon_Model layHoaDonTheoMa(String maHD) {
+        return hoaDonDao.layHoaDonTheoMa(maHD);
+    }
 
 }

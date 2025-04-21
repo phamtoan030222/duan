@@ -60,9 +60,9 @@ public class SanPhamChiTietDao {
                 id = rs.getInt(1);
                 maSpct = rs.getString(2);
                 sp = rs.getString(3);
-                kichThuoc = rs.getString(4);
-                mauSac = rs.getString(5);
-                chatLieu = rs.getString(6);
+                kichThuoc = rs.getString(6);
+                mauSac = rs.getString(4);
+                chatLieu = rs.getString(5);
                 donGia = rs.getString(7);
                 soLuong = rs.getInt(8);
 

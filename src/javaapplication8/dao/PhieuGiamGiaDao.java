@@ -1,4 +1,3 @@
-
 package javaapplication8.dao;
 
 import java.sql.Connection;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javaapplication8.model.HoaDon_Model;
 import javaapplication8.model.PhieuGiamGiaModel;
+import javaapplication8.until.CurrentUser;
 import javaapplication8.until.DBConnect;
 
 public class PhieuGiamGiaDao {
@@ -45,6 +45,8 @@ public class PhieuGiamGiaDao {
             Phieu_Giam_Gia pgg
         JOIN 
             NhanVien nv ON pgg.id_NV = nv.id
+        WHERE 
+            pgg.trang_thai <> 4;
     """;
 
         try {
@@ -181,7 +183,57 @@ public class PhieuGiamGiaDao {
             }
         }
         return false;
+    }
 
+    public boolean themMoiPGG(PhieuGiamGiaModel pgg) {
+        String sql = """
+                     INSERT INTO Phieu_Giam_Gia (MA_PHIEU, TEN_PHIEU, SO_LUONG, HOA_DON_TOI_THIEU, 
+                                                                 SO_PHAN_TRAM_GIAM, SO_TIEN_GIAM_TOI_DA, NGAY_BAT_DAU, 
+                                                                 NGAY_HET_HAN, NGAY_TAO, ID_NV, TRANG_THAI)
+                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                     """;
+        try {
+            
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, pgg.getMaPGG());
+            ps.setString(2, pgg.getTenPGG());
+            ps.setInt(3, pgg.getSoLuong());
+            ps.setBigDecimal(4, pgg.getHDToiThieu());
+            ps.setInt(5, pgg.getPhantramgiam());
+            ps.setBigDecimal(6, pgg.getGiamToiDa());
+            ps.setString(7, pgg.getNgayDB());        // lấy từ JDateChooser
+            ps.setString(8, pgg.getNgayKT());        // lấy từ JDateChooser
+            ps.setString(9, pgg.getNgayTao());       // ngày hôm nay
+            ps.setInt(10, CurrentUser.get().getId()); // gán ID_NV từ người đăng nhập
+            ps.setInt(11, pgg.getTrangThai());   
+
+
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    
+    public boolean xoaPhieuGiamGia(String maPGG) {
+        String sql = """
+              update Phieu_Giam_Gia
+              set TRANG_THAI = 4
+              where MA_PHIEU = ?
+              """;
+
+        try {
+            ps = conn.prepareStatement(sql);
+
+            ps.setNString(1, maPGG);
+
+            return ps.executeUpdate() > 0;//thêm/sửa/xoá:executeUpđate()
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

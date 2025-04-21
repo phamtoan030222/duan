@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
  * @author phamd
  */
 public class STT {
-    public static void updateSTT(DefaultTableModel model) {
+    public static void updateSTT(DefaultTableModel model, int startSTT) {
         // Lưu danh sách listener hiện có
         TableModelListener[] listeners = model.getTableModelListeners();
         
@@ -23,7 +23,7 @@ public class STT {
 
         // Cập nhật STT
         for (int i = 0; i < model.getRowCount(); i++) {
-            model.setValueAt(i + 1, i, 0);
+            model.setValueAt(startSTT + i, i, 0);
         }
 
         // Khôi phục listener sau khi cập nhật xong

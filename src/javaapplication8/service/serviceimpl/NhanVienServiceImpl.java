@@ -35,4 +35,34 @@ public class NhanVienServiceImpl implements NhanVienService {
         return nvDao.countAll();
     }
 
+    @Override
+    public boolean themMoiNhanVien(Model_NhanVien nv) {
+        return nvDao.themMoiNhanVien(nv);
+    }
+
+    @Override
+    public boolean capNhatNhanVien(Model_NhanVien nv) {
+        return nvDao.capNhatNhanVien(nv);
+    }
+
+    @Override
+    public boolean xoaNhanVien(String maNV) {
+        return nvDao.xoaNhanVien(maNV);
+    }
+
+    @Override
+    public List<Model_NhanVien> danhSachTimKiem(String timkiem, int offset, int limit) {
+        return nvDao.danhSachTimKiem(timkiem, offset, limit);
+    }
+
+    @Override
+    public boolean capNhatMatKhauForm(String ma, String newPassword) {
+        return nvDao.capNhatMatKhauForm(ma, newPassword);
+    }
+
+    @Override
+    public boolean checkOldPassword(String maNV, String oldPassword) {
+        return nvDao.checkOldPassword(maNV, oldPassword);
+    }
+
 }

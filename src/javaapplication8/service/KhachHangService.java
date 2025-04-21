@@ -12,4 +12,10 @@ public interface KhachHangService {
     
     KhachHangModel layKhachHangTheoMa(String makh);
     
+    boolean capNhatKhachHang(KhachHangModel kh);
+    
+    boolean xoaKhachHang(String maHk);
+    
+    List<KhachHangModel> timKiem(String timKiem);
+    
 }

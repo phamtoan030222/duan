@@ -25,7 +25,7 @@ public class ValidationUtil {
     }
     
     public static boolean kiemTraMa(String ma){
-        return ma.matches("^[A-Z]{2}\\d{3}$");
+        return ma.matches("^[a-zA-Z]{2}\\d{3}$");
     }
     
     public static boolean kiemTraDinhDangEmail(String email) {

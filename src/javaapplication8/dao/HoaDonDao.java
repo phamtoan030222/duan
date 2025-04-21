@@ -1,15 +1,26 @@
 package javaapplication8.dao;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javaapplication8.model.HoaDonChiTiet_Model;
 import javaapplication8.model.HoaDon_Model;
+import javaapplication8.model.LichSuHoaDon;
 import javaapplication8.until.DBConnect;
 
 public class HoaDonDao {
@@ -138,7 +149,6 @@ public class HoaDonDao {
         return list;
     }
 
-
     public List<HoaDonChiTiet_Model> layChiTietHoaDonTheoID(int idHoaDon) {
         List<HoaDonChiTiet_Model> dsGioHang = new ArrayList<>();
         String sql = """
@@ -149,21 +159,18 @@ public class HoaDonDao {
                         ms.TEN AS MAU_SAC,
                         cl.TEN AS CHAT_LIEU,
                         kt.TEN AS KICH_THUOC,
-                        FORMAT(hdct.DON_GIA, 'N0') + ' VND' AS DON_GIA,
+                        hdct.DON_GIA AS DON_GIA,
                         hdct.SO_LUONG,
-                        FORMAT(hdct.DON_GIA * hdct.SO_LUONG, 'N0') + ' VND' AS THANH_TIEN
+                        (hdct.DON_GIA * hdct.SO_LUONG) AS THANH_TIEN
                     FROM Hoa_Don_Chi_Tiet hdct
                     JOIN San_Pham_Chi_Tiet spct ON hdct.ID_SPCT = spct.ID
                     JOIN San_Pham sp ON spct.ID_SAN_PHAM = sp.ID
                     JOIN Mau_Sac ms ON spct.ID_MAU_SAC = ms.ID
                     JOIN Chat_Lieu cl ON spct.ID_CHAT_LIEU = cl.ID
                     JOIN Kich_Thuoc kt ON spct.ID_KICH_THUOC = kt.ID
-<<<<<<< HEAD
                     JOIN Hoa_Don h ON hdct.ID_HD = h.ID
                     WHERE hdct.ID_HD = ? ;
-=======
-                    WHERE hdct.ID_HD = ?;
->>>>>>> 1321c227411705f5e3dd115c72a220c19972d454
+
                     """;
         try {
             ps = conn.prepareStatement(sql);
@@ -266,47 +273,63 @@ public class HoaDonDao {
         return false;
     }
 
-    public boolean updateHoaDon(String maHD, String ngayThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra) {
-        String sql = """
-    UPDATE Hoa_Don 
-    SET ID_KH = ?, 
-        ID_PGG = ?, 
-        ID_THANH_TOAN = ?,
-        TONG_TIEN = ?, 
-        TONG_TIEN_KHI_GIAM = ?,
-        NGAY_THANH_TOAN = ?, 
-        TRANG_THAI = 1
-    WHERE MA_HD = ?
-""";
+    public boolean updateHoaDon(String maHD, LocalDateTime thoiGianThanhToan, int idKH, BigDecimal tongTien, int idPhieuGG, int hinhTHucThanhToan, BigDecimal tongTienThucTra) {
+        String sqlUpdate = """
+        UPDATE Hoa_Don 
+        SET ID_KH = ?, 
+            ID_PGG = ?, 
+            ID_THANH_TOAN = ?,
+            TONG_TIEN = ?, 
+            TONG_TIEN_KHI_GIAM = ?,
+            NGAY_THANH_TOAN = ?, 
+            TRANG_THAI = 1
+        WHERE MA_HD = ?
+    """;
+
+        String sqlInsertLog = """
+        INSERT INTO Hanh_Dong_Hoa_Don (ID_HD, ID_HANH_DONG, THOI_GIAN)
+        VALUES (?, ?, ?)
+    """;
 
         try {
-            ps = conn.prepareStatement(sql);
-
-            // Nếu ID là -1 thì set NULL, ngược lại setInt bình thường
-            if (idKH == -1) {
-                ps.setNull(1, java.sql.Types.INTEGER);
-            } else {
-                ps.setInt(1, idKH);
-            }
-
             if (idPhieuGG == -1) {
-                ps.setNull(2, java.sql.Types.INTEGER);
-            } else {
-                ps.setInt(2, idPhieuGG);
+                tongTienThucTra = tongTien;
             }
 
-            if (hinhTHucThanhToan == -1) {
-                ps.setNull(3, java.sql.Types.INTEGER);
-            } else {
-                ps.setInt(3, hinhTHucThanhToan);
-            }
+            // 1. Cập nhật hóa đơn
+            ps = conn.prepareStatement(sqlUpdate);
 
+            // Set các giá trị
+            ps.setObject(1, idKH == -1 ? null : idKH, java.sql.Types.INTEGER);
+            ps.setObject(2, idPhieuGG == -1 ? null : idPhieuGG, java.sql.Types.INTEGER);
+            ps.setObject(3, hinhTHucThanhToan == -1 ? null : hinhTHucThanhToan, java.sql.Types.INTEGER);
             ps.setBigDecimal(4, tongTien);
             ps.setBigDecimal(5, tongTienThucTra);
-            ps.setString(6, ngayThanhToan);
+            ps.setTimestamp(6, Timestamp.valueOf(thoiGianThanhToan)); // dùng thời gian hiện tại
             ps.setString(7, maHD);
 
-            return ps.executeUpdate() > 0;
+            int updated = ps.executeUpdate();
+
+            if (updated > 0) {
+                // 2. Lấy ID_HD từ MA_HD
+                String getIdSql = "SELECT ID FROM Hoa_Don WHERE MA_HD = ?";
+                PreparedStatement getIdStmt = conn.prepareStatement(getIdSql);
+                getIdStmt.setString(1, maHD);
+                ResultSet rs = getIdStmt.executeQuery();
+
+                if (rs.next()) {
+                    int idHD = rs.getInt("ID");
+
+                    // 3. Ghi log vào bảng Hanh_Dong_Hoa_Don
+                    PreparedStatement insertLog = conn.prepareStatement(sqlInsertLog);
+                    insertLog.setInt(1, idHD);
+                    insertLog.setInt(2, 5); // hành động: thanh toán
+                    insertLog.setTimestamp(3, Timestamp.valueOf(thoiGianThanhToan));
+
+                    insertLog.executeUpdate();
+                    return true;
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -315,7 +338,7 @@ public class HoaDonDao {
         return false;
     }
 
-    public boolean huyHoaDon(String maHD){
+    public boolean huyHoaDon(String maHD) {
         String sql = """
                      UPDATE HOA_DON SET TRANG_THAI = 2
                      WHERE MA_HD = ?
@@ -329,23 +352,215 @@ public class HoaDonDao {
         }
         return false;
     }
-    
-    public HoaDon_Model layIdHoaDonTheoMa(String maHD){
+
+    public HoaDon_Model layIdHoaDonTheoMa(String maHD) {
         String sql = """
-                     SELECT ID FROM Hoa_Don WHERE ma_hd = ?
-                     """;
-        HoaDon_Model hd = new HoaDon_Model();
+                 SELECT hd.ID 
+                 FROM Hoa_Don hd
+                 WHERE hd.TRANG_THAI = 0 AND hd.Ma_hd = ?;
+                 """;
+
+        HoaDon_Model hd = null;
         try {
             ps = conn.prepareStatement(sql);
             ps.setString(1, maHD);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
+                hd = new HoaDon_Model();
                 hd.setId(rs.getInt("ID"));
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return hd;
+    }
+
+    public HoaDon_Model layHoaDonTheoMa(String maHD) {
+        String sql = """
+                     SELECT hd.ID, hd.Ma_HD, hd.Ngay_Tao, hd.Ngay_Thanh_Toan,
+                                         hd.Tong_Tien_Khi_Giam, nv.Ma_NV, kh.TEN_KHACH_HANG,
+                                         kh.DIA_CHI, kh.SDT, hd.QR_CODE_PATH
+                                         FROM Hoa_Don hd
+                                         LEFT JOIN NhanVien nv ON hd.ID_NV = nv.ID
+                                         LEFT JOIN Khach_Hang kh ON hd.ID_KH = kh.ID
+                                         WHERE hd.TRANG_THAI = 1;
+                     """;
+        HoaDon_Model hd = new HoaDon_Model();
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                
+                hd.setId(rs.getInt("ID"));
+                hd.setMaHD(rs.getString("Ma_HD"));
+                hd.setNgayTao(rs.getString("Ngay_Tao"));
+                hd.setNgayTT(rs.getString("NGAY_THANH_TOAN"));
+
+// Format số tiền
+                String tongTienStr = rs.getString("TONG_TIEN_KHI_GIAM");
+                double tien = 0;
+                try {
+                    tien = Double.parseDouble(tongTienStr);
+                } catch (NumberFormatException e) {
+                    // Nếu dữ liệu lỗi, giữ 0
+                }
+                NumberFormat currencyFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+                String formattedTien = currencyFormat.format(tien) + " VND";
+                hd.setTongTienKhiGiam(formattedTien);
+
+// Mã nhân viên
+                hd.setMaNV(rs.getString("Ma_NV"));
+
+// Xử lý thông tin khách hàng nếu null
+                String tenKH = rs.getString("TEN_KHACH_HANG");
+                if (tenKH == null || tenKH.trim().isEmpty()) {
+                    hd.setTenKhachHang("Khách bán lẻ");
+                    hd.setDiaChiKhachHang("");
+                    hd.setSdtKH("");
+                } else {
+                    hd.setTenKhachHang(tenKH);
+                    hd.setDiaChiKhachHang(rs.getString("DIA_CHI"));
+                    hd.setSdtKH(rs.getString("SDT"));
+                }
+                hd.setQrHoaDon(rs.getString("QR_CODE_PATH"));
+
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hd;
+    }
+
+    public List<HoaDon_Model> danhsachHoaDonDaThanhToan() {
+        String sql = """
+                    SELECT hd.ID, hd.Ma_HD, hd.Ngay_Tao, hd.Ngay_Thanh_Toan,
+                    hd.Tong_Tien_Khi_Giam, nv.Ma_NV, kh.TEN_KHACH_HANG,
+                    kh.DIA_CHI, kh.SDT
+                    FROM Hoa_Don hd
+                    LEFT JOIN NhanVien nv ON hd.ID_NV = nv.ID
+                    LEFT JOIN Khach_Hang kh ON hd.ID_KH = kh.ID
+                    WHERE hd.TRANG_THAI = 1;
+                    """;
+        try {
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                HoaDon_Model hd = new HoaDon_Model();
+                hd.setId(rs.getInt("ID"));
+                hd.setMaHD(rs.getString("Ma_HD"));
+                hd.setNgayTao(rs.getString("Ngay_Tao"));
+                hd.setNgayTT(rs.getString("NGAY_THANH_TOAN"));
+
+// Format số tiền
+                String tongTienStr = rs.getString("TONG_TIEN_KHI_GIAM");
+                double tien = 0;
+                try {
+                    tien = Double.parseDouble(tongTienStr);
+                } catch (NumberFormatException e) {
+                    // Nếu dữ liệu lỗi, giữ 0
+                }
+                NumberFormat currencyFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+                String formattedTien = currencyFormat.format(tien) + " VND";
+                hd.setTongTienKhiGiam(formattedTien);
+
+// Mã nhân viên
+                hd.setMaNV(rs.getString("Ma_NV"));
+
+// Xử lý thông tin khách hàng nếu null
+                String tenKH = rs.getString("TEN_KHACH_HANG");
+                if (tenKH == null || tenKH.trim().isEmpty()) {
+                    hd.setTenKhachHang("Khách bán lẻ");
+                    hd.setDiaChiKhachHang("");
+                    hd.setSdtKH("");
+                } else {
+                    hd.setTenKhachHang(tenKH);
+                    hd.setDiaChiKhachHang(rs.getString("DIA_CHI"));
+                    hd.setSdtKH(rs.getString("SDT"));
+                }
+
+                list.add(hd);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void hanhDong(int idHD, int hanhDong, LocalDateTime thoiGianInHD, int idNV) {
+
+        System.out.println("idHDong: " + hanhDong);
+        String sql = """
+                     INSERT INTO Hanh_Dong_Hoa_Don(ID_HD, ID_HANH_DONG, THOI_GIAN, ID_NV)
+                     VALUES (?,?,?,?)
+                     """;
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idHD);
+            ps.setInt(2, hanhDong);
+            ps.setTimestamp(3, Timestamp.valueOf(thoiGianInHD));
+            ps.setInt(4, idNV);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<LichSuHoaDon> lichSuHoaDonTheoID(int idHD) {
+        List<LichSuHoaDon> lc = new ArrayList<>();
+        String sql = """
+                    SELECT hdhd.id_new, nv.MA_NV, CONVERT(date, hdhd.THOI_GIAN) AS Ngay,
+                    FORMAT(hdhd.THOI_GIAN, 'HH:mm') AS GioPhut,
+                    hanhdong.TEN_HANH_DONG 
+                    FROM HANH_DONG_HOA_DON hdhd
+                    JOIN NhanVien nv ON nv.id = hdhd.ID_NV
+                    JOIN HANH_DONG hanhdong ON hanhdong.id = hdhd.id_HANH_DONG
+                    WHERE hdhd.id_HD = ?
+                    """;
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idHD);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                LichSuHoaDon ls = new LichSuHoaDon();
+                ls.setId(rs.getInt("id_new"));
+                ls.setMaNV(rs.getString("MA_NV"));
+                ls.setGio(rs.getString("GioPhut"));
+                ls.setNgay(rs.getString("Ngay"));
+                ls.setHanhDong(rs.getString("TEN_HANH_DONG"));
+                lc.add(ls);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lc;
+    }
+
+    public boolean taoVaLuuQR(String maHD) {
+        try {
+            String data = maHD;
+            String path = "qr_hoadon/" + maHD + ".png"; // thư mục qr, nên tạo trước
+            int width = 200, height = 200;
+
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, width, height);
+            Path filePath = Paths.get(path);
+            MatrixToImageWriter.writeToPath(bitMatrix, "PNG", filePath);
+
+            // Sau khi tạo xong, cập nhật đường dẫn vào CSDL
+            String sql = "UPDATE Hoa_Don SET QR_CODE_PATH = ? WHERE MA_HD = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, path);
+            ps.setString(2, maHD);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

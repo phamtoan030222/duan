@@ -12,6 +12,7 @@ import javaapplication8.model.Model_NhanVien;
 import javaapplication8.service.NhanVienService;
 import javaapplication8.service.serviceimpl.NhanVienServiceImpl;
 import javaapplication8.swing.QuenMatKhau;
+import javaapplication8.until.CurrentUser;
 import javaapplication8.until.Text;
 import javaapplication8.until.ValidationUtil;
 import javax.swing.JOptionPane;
@@ -182,12 +183,13 @@ public class PanelCover extends javax.swing.JPanel {
         }
 
         JOptionPane.showMessageDialog(this, Text.DNTC);
+        
         this.setVisible(false);
         Window window = SwingUtilities.getWindowAncestor(this);
         if(window != null) {
             window.setVisible(false);
         }
-        
+        CurrentUser.set(nv);
         Main main = new Main(nv);
         main.setLocationRelativeTo(null);
         main.setVisible(true);

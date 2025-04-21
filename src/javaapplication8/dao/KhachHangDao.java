@@ -21,6 +21,7 @@ public class KhachHangDao {
     }
 
     public List<KhachHangModel> danhSachKhachHang() {
+        list.clear();
         String sql = """
                      SELECT ID, TEN_KHACH_HANG,DIA_CHI,
                             SDT, GIOI_TINH, MA_KH
@@ -87,6 +88,72 @@ public class KhachHangDao {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public boolean capNhatKhachHang(KhachHangModel kh) {
+        String sql = """
+                     UPDATE Khach_Hang SET TEN_KHACH_HANG = ?,
+                                          DIA_CHI = ?, SDT = ?,GIOI_TINH = ?
+                                          WHERE MA_KH = ? 
+                     """;
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, kh.getHoTen());
+            ps.setString(2, kh.getDiaChi());
+            ps.setString(3, kh.getSdt());
+            ps.setBoolean(4, kh.isGioiTinh());
+            ps.setString(5, kh.getMaKH());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean xoaKhachHang(String maHk) {
+        String sql = """
+                     UPDATE Khach_Hang SET DA_XOA = 1
+                     WHERE MA_KH = ?
+                     """;
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, maHk);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public List<KhachHangModel> timKiem(String timKiem) {
+        list.clear(); 
+        String sql = """
+                     SELECT ID, TEN_KHACH_HANG,DIA_CHI,
+                            SDT, GIOI_TINH, MA_KH
+                     FROM Khach_Hang 
+                     WHERE Da_Xoa = 0 AND (TEN_KHACH_HANG LIKE ? OR MA_KH LIKE ?);
+                     """;
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + timKiem + "%");
+            ps.setString(2, "%" + timKiem + "%");
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                KhachHangModel kh = new KhachHangModel();
+                kh.setId(rs.getInt("ID"));
+                kh.setHoTen(rs.getString("TEN_KHACH_HANG"));
+                kh.setDiaChi(rs.getString("DIA_CHI"));
+                kh.setSdt(rs.getString("SDT"));
+                kh.setGioiTinh(rs.getBoolean("GIOI_TINH"));
+                kh.setMaKH(rs.getString("MA_KH"));
+                list.add(kh);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(""+ list.size());
+        return list;
     }
 
 }

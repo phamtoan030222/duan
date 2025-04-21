@@ -16,6 +16,8 @@ public class ChonKhachHangForm extends javax.swing.JFrame {
 
     public ChonKhachHangForm(Consumer<KhachHangModel> callback) {
         this.callback = callback;
+        
+        this.setLocationRelativeTo(null);
 
         initComponents();
         loadData();
@@ -29,7 +31,7 @@ public class ChonKhachHangForm extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tbl_bangkhachhang.getModel();
         model.setRowCount(0);
         for (KhachHangModel khachHangModel : list) {
-            model.addTableModelListener(e -> STT.updateSTT(model));
+            model.addTableModelListener(e -> STT.updateSTT(model,1));
             model.addRow(new Object[]{
                 null,
                 khachHangModel.getMaKH(),

@@ -29,4 +29,14 @@ public class PhieuGiamGiaServiceImpl implements PhieuGiamGiaService {
         return dao.capNhatSoLuongPhieuGiamGia(id);
     }
 
+    @Override
+    public boolean themMoiPGG(PhieuGiamGiaModel pgg) {
+        return dao.themMoiPGG(pgg);
+    }
+
+    @Override
+    public boolean xoaPhieuGiamGia(String maPGG) {
+        return dao.xoaPhieuGiamGia(maPGG);
+    }
+
 }
